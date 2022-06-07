@@ -1,7 +1,6 @@
 # If the user was deleted within 30 days, you can restore the user and all their data from the Microsoft 365 admin center. If you deleted the user more than 30 days ago, the user will no longer appear in the Microsoft 365 admin center, and you'll need to use PowerShell to restore the OneDrive.
 
 # Make sure SPO module is installed 
-
 Set-ExecutionPolicy RemoteSigned  
 Install-Module -Name Microsoft.Online.SharePoint.PowerShell
 Import-Module Microsoft.Online.SharePoint.PowerShell -DisableNameChecking
@@ -9,7 +8,6 @@ Import-Module Microsoft.Online.SharePoint.PowerShell -DisableNameChecking
 # CONNECT TO SHAREPOINT ONLINE:
 
 # Enter your domain below. Example https://test-admin.sharepoint.com. Note: You don't need Get-Credentail, connecting to SPO should prompt for creds.
-
 $domainHost = https://<domainhost>-admin.sharepoint.com
 $credential = Get-Credential
 Connect-SPOService -Url $domainHost -credential $credential
@@ -26,3 +24,7 @@ Restore-SPODeletedSite -Identity $deletedSPOSite
 # Assign an administrator to the SPO / OneDrive to access the needed data
 $admin = user@domain.com
 Set-SPOUser -Site $deletedSPOSite -LoginName $admin -IsSiteCollectionAdmin $True
+
+# Permanently delete a OneDrive / SPO
+Remove-SPOSite -Identity $deletedSPOSite
+Remove-SPODeletedSite -Identity $deletedSPOSite
