@@ -1,0 +1,24 @@
+# When users are deleted from Azure Active Directory (Azure AD), they are moved to a "deleted" state and no longer appear in the user list. However, they are not completely removed, and they can be recovered within 30 days.
+
+# Install MSOnline module
+Install-Module MSOnlin
+
+# CONNECT TO MSOnline
+$credential = Get-Credential
+Connect-MSOLService -credential $credential
+
+# RECOVER DELETED ACCOUNTS
+
+# Get list of deleted users
+Get-MsolUser -ReturnDeletedUsers
+
+# Restore user
+Restore-MsolUser -ObjectId <Guid> -AutoReconcileProxyConflicts -NewUserPrincipalName <string>
+
+# NOTES: To get the Objectid of a user
+Get-MsolUser -ReturnDeletedUsers | FL UserPrincipalName, ObjectId
+
+# NOTES: If the above command doesn't work, try the following command:
+Restore-MsolUser -UserPrincipalName <string> -AutoReconcileProxyConflicts -NewUserPrincipalName <string>
+
+# NOTES: -AutoReconcileProxyConflicts and -NewUserPrincipalNam are optional and are only used if another user was created with the same Proxy and or Principla Name.
